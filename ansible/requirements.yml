@@ -1,7 +1,4 @@
 # from ansible-galaxy
 collections:
   - name: bitwarden.secrets
-    #src: https://github.com/bitwarden/sm-ansible/archive/refs/heads/main.zip
-    #type: galaxy
-    #version: 1.0.0
-
+  - name: community.general
