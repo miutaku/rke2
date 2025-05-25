@@ -1,0 +1,13 @@
+---
+- name: Configure Load Balancer for RKE2 Server Nodes
+  hosts: lb
+  become_user: root
+  become: true
+  gather_facts: true
+  roles:
+    - role: common
+      tags: common
+    - name: haproxy
+      tags: haproxy
+    - name: keepalived
+      tags: keepalived

@@ -1,0 +1,21 @@
+---
+lb:
+  vip: 192.168.0.240 # Router VIP
+
+haproxy:
+  bind: "{{ lb.vip }}"
+  servers:
+    - name: "lb-01-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.135
+    - name: "lb-02-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.136
+
+keepalived:
+  interface: "eth0"
+  vrrp_id: 51
+  vrrp_auth_pass: ""
+
+bw_credentials:
+  haproxy: 'e4db33c2-4c81-462f-af4d-b2e8002b9913'
+  keepalived: '24a0a201-19de-4475-94bc-b2e800eb387a'
+  ssh: '18bb5920-fef9-4a47-ad66-b2bc013c6002'
