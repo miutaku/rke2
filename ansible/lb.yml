@@ -1,6 +1,7 @@
 ---
 - name: Configure Load Balancer for RKE2 Server Nodes
   hosts: lb
+  strategy: debug
   gather_facts: true
   vars:
     ansible_user: root
