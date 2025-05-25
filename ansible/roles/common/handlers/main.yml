@@ -1,5 +1,5 @@
 ---
-- name: restarted untended-upgrade services
+- name: restarted unattended-upgrade services
   service:
     name: "{{ item }}"
     state: restarted
