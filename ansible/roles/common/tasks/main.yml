@@ -11,7 +11,7 @@
 
 - name: upgraded apt packages
   apt:
-    upgrade: '*'
+    name: '*'
     state: latest
     update_cache: true
     autoremove: true
