@@ -1,0 +1,76 @@
+---
+- name: disabled install-recommends
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/00-no-install-recommends"
+    line: "{{ item }}"
+    with_items:
+      - 'APT::Install-Suggests 0;'
+      - 'APT::Install-Recommends 0;'
+    create: true
+    state: present
+
+- name: upgraded apt packages
+  apt:
+    upgrade: '*'
+    state: latest
+    update_cache: true
+    autoremove: true
+
+- name: installed packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - vim
+
+- name: installed untested-upgrades
+  apt:
+    name:
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
+    update_cache: true
+
+- name: enabled 20auto-upgrades for unattended upgrades
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/20auto-upgrades"
+    line: "{{ item }}"
+    create: true
+    state: present
+    with_items:
+    - 'APT::Periodic::Update-Package-Lists "1";'
+    - 'APT::Periodic::Unattended-Upgrade "1";'
+  notify:
+    - restarted unattended-upgrade services
+
+- name: enabled 50unattended-upgrades for unattended upgrades
+  template:
+    src: "50unattended-upgrades.j2"
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    mode: "0644"
+    owner: root
+    group: root
+  notify:
+    - restarted unattended-upgrade services
+
+- name: debug credentials
+  debug:
+    var:
+      - "{{ bw_credentials.ssh }}"
+      - "{{ lookup('bitwarden.secrets.lookup', bw_credentials.ssh, field='public_key') }}"
+
+- name: pushed ssh public key
+  authorized_key:
+    user: "{{ ansible_ssh_user }}"
+    state: present
+    key: "{{ lookup('bitwarden.secrets.lookup', bw_credentials.ssh, field='public_key') }}"
+  register: ssh_key
+
+- name: disabled ssh password authentication
+  lineinfile:
+    line:
+      - "PasswordAuthentication no"
+      - "PermitRootLogin no"
+  notify:
+    - restarted ssh
