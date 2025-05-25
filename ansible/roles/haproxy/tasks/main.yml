@@ -1,0 +1,23 @@
+---
+- name: installed haproxy
+  apt:
+    name: haproxy
+    state: present
+    update_cache: true
+
+- name: debug credentials
+  debug:
+    var:
+      - "{{ bw_credentials.haproxy }}"
+      - "{{ haproxy_user }}"
+      - "{{ haproxy_password }}"
+
+- name: prepared haproxy config
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: "0644"
+    owner: root
+    group: root
+  notify:
+    - restarted haproxy

@@ -1,0 +1,38 @@
+global
+    log stdout  format raw  local0
+    maxconn 4096
+    tune.ssl.default-dh-param 2048
+
+defaults
+    mode                tcp
+    log                 global
+    option              tcplog
+    timeout connect     5s
+    timeout client      30s
+    timeout server      30s
+
+# tcp proxy for k8s api
+frontend k8s_api_front
+    bind {{ haproxy.bind }}:6443
+    default_backend k8s_api_back
+
+backend k8s_api_back
+    balance     roundrobin
+    option      tcp-check
+    # health check for api server /healthz
+    tcp-check send GET\ /healthz\ HTTP/1.1\r\nHost:\ api-server
+    tcp-check expect string ok
+
+    # RKE2 server nodes
+    {% for server in haproxy.servers %}
+    server {{ server.name }} {{ server.ip }}:6443 check
+    {% endfor %}
+
+# HAP status page
+listen stats
+    bind 0.0.0.0:8404
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    stats refresh 10s
+    stats auth {{ haproxy_user }}:{{ haproxy_password }}
