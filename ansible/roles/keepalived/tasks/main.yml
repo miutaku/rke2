@@ -1,0 +1,22 @@
+---
+- name: installed keepalived
+  apt:
+    name: keepalived
+    state: present
+    update_cache: true
+
+- name: debug credentials
+  debug:
+    var:
+      - "{{ bw_credentials.keepalived }}"
+      - "{{ keepalived_auth_pass }}"
+
+- name: prepared keepalived configuration
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart keepalived

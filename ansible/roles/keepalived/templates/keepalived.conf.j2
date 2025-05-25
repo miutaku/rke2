@@ -1,0 +1,26 @@
+vrrp_script chk_haproxy {
+    script "pidof haproxy"
+    interval 2
+    weight 2
+}
+
+vrrp_instance VI_1 {
+    state {% if keepalived_priority == (groups['lb'] | map('extract', hostvars, 'keepalived_priority') | max) %}MASTER{% else %}BACKUP{% endif %}
+    interface {{ keepalived.interface }}
+    virtual_router_id {{ keepalived.vrrp_id }}
+    priority {{ keepalived_priority }}
+    advert_int 1
+
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_auth_pass }}
+    }
+
+    virtual_ipaddress {
+        {{ lb.vip }}/32
+    }
+
+    track_script {
+        chk_haproxy
+    }
+}
