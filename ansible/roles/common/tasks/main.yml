@@ -3,11 +3,11 @@
   lineinfile:
     path: "/etc/apt/apt.conf.d/00-no-install-recommends"
     line: "{{ item }}"
-    with_items:
-      - 'APT::Install-Suggests 0;'
-      - 'APT::Install-Recommends 0;'
     create: true
     state: present
+  with_items:
+    - 'APT::Install-Suggests 0;'
+    - 'APT::Install-Recommends 0;'
 
 - name: upgraded apt packages
   apt:
