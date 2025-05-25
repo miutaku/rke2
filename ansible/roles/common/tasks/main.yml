@@ -39,8 +39,8 @@
     create: true
     state: present
     with_items:
-    - 'APT::Periodic::Update-Package-Lists "1";'
-    - 'APT::Periodic::Unattended-Upgrade "1";'
+      - 'APT::Periodic::Update-Package-Lists "1";'
+      - 'APT::Periodic::Unattended-Upgrade "1";'
   notify:
     - restarted unattended-upgrade services
 
