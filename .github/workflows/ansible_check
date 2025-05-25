@@ -1,9 +1,16 @@
-name: ansible-lint & syntax-check
+---
+name: ansible test
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'ansible/**'
+
+env:
+  PYTHON_VERSION: 3.13
 
 jobs:
-  lint:
+  lb-ansible-test:
     defaults:
       run:
         working-directory: ansible
@@ -12,9 +19,42 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.13
+          python-version: ${{ env.PYTHON_VERSION }}
       - run: |
-          pip install poetry
-          poetry install --no-root
-      - run: poetry run ansible-lint .
-      - run: poetry run ansible-playbook playbook.yml --syntax-check
+          pip3 install pipenv
+          pipenv install --dev
+      - run: pipenv run ansible-lint lb.yml
+      - run: pipenv run ansible-playbook lb.yml --syntax-check
+
+#  server-ansible-check:
+#    defaults:
+#      run:
+#        working-directory: ansible
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: ${{ env.PYTHON_VERSION }}
+#      - run: |
+#          pip3 install pipenv
+#          pipenv install --dev
+#      - run: pipenv run ansible-lint server.yml
+#      - run: pipenv run ansible-playbook server.yml --syntax-check
+#
+#  agent-ansible-check:
+#    defaults:
+#      run:
+#        working-directory: ansible
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: ${{ env.PYTHON_VERSION }}
+#      - run: |
+#          pip3 install pipenv
+#          pipenv install --dev
+#      - run: pipenv run ansible-lint agent.yml
+#      - run: pipenv run ansible-playbook agent.yml --syntax-check
+#
