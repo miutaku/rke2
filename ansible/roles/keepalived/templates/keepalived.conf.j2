@@ -13,7 +13,7 @@ vrrp_instance VI_1 {
 
     authentication {
         auth_type PASS
-        auth_pass {{ keepalived_auth_pass }}
+        auth_pass {{ keepalived_auth_pass.stdout }}
     }
 
     virtual_ipaddress {
