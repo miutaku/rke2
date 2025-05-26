@@ -5,30 +5,6 @@
     state: present
     update_cache: true
 
-- name: Unlocked bitwarden vault with generated session key
-  shell:
-    cmd: "bw unlock {{ bw_passwd }} --raw"
-    executable: "/bin/bash"
-  environment:
-    PATH: "{{ lookup('env', 'PATH') }}"
-  delegate_to: localhost
-  register: bw_session_key
-  check_mode: false
-  changed_when: false
-  notify:
-    - locked bitwarden vault
-
-- name: get haproxy account from bitwarden
-  shell:
-    cmd: "bw get item {{ bw_credentials.haproxy }} --session {{ bw_session_key.stdout }} | jq -r .login"
-    executable: "/bin/bash"
-  delegate_to: localhost
-  register: haproxy_credentials
-  check_mode: false
-  changed_when: false
-  notify:
-    - locked bitwarden vault
-
 - name: prepared haproxy config
   template:
     src: haproxy.cfg.j2

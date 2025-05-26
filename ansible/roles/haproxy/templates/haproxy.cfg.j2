@@ -35,4 +35,3 @@ listen stats
     stats enable
     stats uri /haproxy?stats
     stats refresh 10s
-    stats auth {{ (haproxy_login_json.stdout | from_json).username }}:{{ (haproxy_login_json.stdout | from_json).password }}
