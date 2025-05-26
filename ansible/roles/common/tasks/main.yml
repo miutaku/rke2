@@ -54,6 +54,14 @@
   notify:
     - restarted unattended-upgrade services
 
+- name: Initialized bitwarden vault
+  shell:
+    cmd: "bw sync"
+    executable: "/bin/bash"
+  delegate_to: localhost
+  check_mode: false
+  changed_when: false
+
 - name: Unlocked bitwarden vault with generated session key
   shell:
     cmd: "bw unlock {{ bw_passwd }} --raw"
