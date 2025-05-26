@@ -3,3 +3,13 @@
   service:
     name: haproxy
     state: restarted
+
+- name: locked bitwarden vault
+  shell:
+    cmd: "bw lock"
+    executable: "/bin/bash"
+  delegate_to: localhost
+  check_mode: false
+  changed_when: false
+  notify:
+    - restarted haproxy
