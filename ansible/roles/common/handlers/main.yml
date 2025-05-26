@@ -4,9 +4,9 @@
     name: "{{ item }}"
     state: restarted
   with_items:
-    - restart unattended-upgrades
-    - restart apt-daily.timer
-    - restart apt-daily-upgrade.timer
+    - unattended-upgrades
+    - apt-daily.timer
+    - apt-daily-upgrade.timer
 
 - name: restarted ssh
   service:
