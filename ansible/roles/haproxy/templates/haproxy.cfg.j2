@@ -25,7 +25,7 @@ backend k8s_api_back
 
     # RKE2 server nodes
     {% for server in haproxy.servers %}
-    server {{ server.name }} {{ server.ip }}:6443 check
+    server {{ servers.name }} {{ servers.ip }}:6443 check
     {% endfor %}
 
 # HAP status page
