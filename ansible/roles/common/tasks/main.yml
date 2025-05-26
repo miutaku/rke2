@@ -102,6 +102,6 @@
     validate: "/usr/sbin/sshd -t -f %s"
   with_items:
     - "PasswordAuthentication no"
-    - "PermitRootLogin no"
+    - "PermitRootLogin yes"
   notify:
     - restarted ssh
