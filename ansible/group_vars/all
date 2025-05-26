@@ -5,10 +5,12 @@ lb:
 haproxy:
   bind: "{{ lb.vip }}"
   servers:
-    - name: "lb-01-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64"
-      ip: 192.168.0.135
-    - name: "lb-02-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64"
-      ip: 192.168.0.136
+    - name: "master-01-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.126
+    - name: "master-02-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.127
+    - name: "master-03-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.128
 
 keepalived:
   interface: "eth0"
