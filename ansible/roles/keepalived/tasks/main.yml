@@ -35,4 +35,4 @@
     group: root
     mode: '0644'
   notify:
-    - restared keepalived
+    - restarted keepalived
