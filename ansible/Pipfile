@@ -6,8 +6,7 @@ name = "pypi"
 [packages]
 ansible = "*"
 ansible-core = "*"
-#bitwarden-sdk = {git = "https://github.com/davzoku/sdk-sm.git", ref = "fix_pip_install_build_error", subdirectory = "crates/bitwarden-py"}
-#bws = "*"
+jmespath = "*"
 
 [dev-packages]
 
