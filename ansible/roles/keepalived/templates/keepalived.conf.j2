@@ -5,7 +5,12 @@ vrrp_script chk_haproxy {
 }
 
 vrrp_instance VI_1 {
-    state {% if keepalived_priority == (groups['lb'] | map('extract', hostvars, 'keepalived_priority') | max) %}MASTER{% else %}BACKUP{% endif %}
+    {% if keepalived_priority == (groups['lb'] | map('extract', hostvars, 'keepalived_priority') | max) -%}
+    state MASTER
+    {%- else -%}
+    state BACKUP
+    {%- endif %}
+
     interface {{ keepalived.interface }}
     virtual_router_id {{ keepalived.vrrp_id }}
     priority {{ keepalived_priority }}
