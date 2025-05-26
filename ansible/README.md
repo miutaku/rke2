@@ -22,7 +22,7 @@ export BWS_ACCESS_TOKEN=<ACCESS_TOKEN_VALUE>
 # lint
 pipenv run ansible-playbook -i hosts/inventory playbook.yml --syntax-check
 # dry-run
-pipenv run ansible-playbook -i hosts/inventory playbook.yml --check
+pipenv run ansible-playbook -i hosts/inventory playbook.yml -e bw_passwd=BW_MASTER_PASSWORD --check
 # run
-pipenv run ansible-playbook -i hosts/inventory playbook.yml
+pipenv run ansible-playbook -i hosts/inventory playbook.yml -e bw_passwd=BW_MASTER_PASSWORD
 ```
