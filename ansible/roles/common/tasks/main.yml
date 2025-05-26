@@ -61,6 +61,7 @@
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
   delegate_to: localhost
+  run_once: true
   register: bw_session_key
   check_mode: false
   changed_when: false
@@ -72,6 +73,7 @@
     cmd: "bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
     executable: "/bin/bash"
   delegate_to: localhost
+  run_once: true
   register: ssh_public_key
   check_mode: false
   changed_when: false
