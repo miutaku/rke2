@@ -1,6 +1,6 @@
 ---
 - name: Configure Load Balancer for RKE2 Server Nodes
-  hosts: lb
+  hosts: rke2-lb
   strategy: debug
   gather_facts: true
   vars:

@@ -1,0 +1,4 @@
+---
+- import_playbook: lb.yml
+#- import_playbook: rke2_server.yml
+#- import_playbook: rke2_agent.yml

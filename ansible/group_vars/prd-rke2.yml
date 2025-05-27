@@ -1,0 +1,13 @@
+---
+lb:
+  vip: 192.168.0.240 # Router VIP
+
+haproxy:
+  bind: "{{ lb.vip }}"
+  servers:
+    - name: "master-01-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.126
+    - name: "master-02-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.127
+    - name: "master-03-rke2-server-ubuntu-24-04-home-amd64"
+      ip: 192.168.0.128

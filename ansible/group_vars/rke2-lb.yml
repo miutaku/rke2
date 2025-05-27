@@ -1,0 +1,4 @@
+---
+keepalived:
+  interface: "eth0"
+  vrrp_id: 51
