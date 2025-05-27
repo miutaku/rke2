@@ -1,10 +1,10 @@
 ---
-- name: restarted keepalived
+- name: Restarted keepalived
   service:
     name: keepalived
     state: restarted
 
-- name: locked bitwarden vault
+- name: Locked bitwarden vault
   shell:
     cmd: "bw lock"
     executable: "/bin/bash"

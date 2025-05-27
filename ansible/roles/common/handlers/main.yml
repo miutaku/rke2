@@ -1,5 +1,5 @@
 ---
-- name: restarted unattended-upgrade services
+- name: Restarted unattended-upgrade services
   service:
     name: "{{ item }}"
     state: restarted
@@ -8,12 +8,12 @@
     - apt-daily.timer
     - apt-daily-upgrade.timer
 
-- name: restarted ssh
+- name: Restarted ssh
   service:
     name: ssh
     state: restarted
 
-- name: locked bitwarden vault
+- name: Locked bitwarden vault
   shell:
     cmd: "bw lock"
     executable: "/bin/bash"

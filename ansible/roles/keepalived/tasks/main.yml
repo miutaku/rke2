@@ -1,5 +1,5 @@
 ---
-- name: installed keepalived
+- name: Installed keepalived
   apt:
     name: keepalived
     state: present
@@ -25,9 +25,9 @@
   check_mode: false
   changed_when: false
   notify:
-    - locked bitwarden vault
+    - Locked bitwarden vault
 
-- name: got keepalived auth_pass from bitwarden
+- name: Got keepalived auth_pass from bitwarden
   shell:
     cmd: "bw get item {{ bw_credentials.keepalived }} --session {{ bw_session_key.stdout }} | jq -r .login.password"
     executable: "/bin/bash"
@@ -37,7 +37,7 @@
   check_mode: false
   changed_when: false
 
-- name: prepared keepalived configuration
+- name: Prepared keepalived configuration
   template:
     src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
@@ -45,4 +45,4 @@
     group: root
     mode: '0644'
   notify:
-    - restarted keepalived
+    - Restarted keepalived
