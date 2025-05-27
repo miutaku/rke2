@@ -8,7 +8,7 @@
   roles:
     - role: common
       tags: common
-    - name: haproxy
+    - role: haproxy
       tags: haproxy
-    - name: keepalived
+    - role: keepalived
       tags: keepalived

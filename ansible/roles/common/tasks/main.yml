@@ -1,61 +1,67 @@
 ---
-- name: disabled install-recommends
-  lineinfile:
+- name: Disabled install-recommends
+  ansible.builtin.lineinfile:
     path: "/etc/apt/apt.conf.d/00-no-install-recommends"
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
   with_items:
     - 'APT::Install-Suggests 0;'
     - 'APT::Install-Recommends 0;'
 
-- name: upgraded apt packages
-  apt:
+- name: Upgraded apt packages
+  ansible.builtin.apt:
     name: '*'
-    state: latest
+    state: present
     update_cache: true
     autoremove: true
 
-- name: installed packages
-  apt:
+- name: Installed packages
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
     update_cache: true
   with_items:
     - vim
 
-- name: installed untested-upgrades
-  apt:
+- name: Installed untested-upgrades
+  ansible.builtin.apt:
     name:
       - unattended-upgrades
       - apt-listchanges
     state: present
     update_cache: true
 
-- name: enabled 20auto-upgrades for unattended upgrades
-  lineinfile:
+- name: Enabled 20auto-upgrades for unattended upgrades
+  ansible.builtin.lineinfile:
     path: "/etc/apt/apt.conf.d/20auto-upgrades"
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
   with_items:
     - 'APT::Periodic::Update-Package-Lists "1";'
     - 'APT::Periodic::Unattended-Upgrade "1";'
   notify:
-    - restarted unattended-upgrade services
+    - Restarted unattended-upgrade services
 
-- name: enabled 50unattended-upgrades for unattended upgrades
-  template:
+- name: Enabled 50unattended-upgrades for unattended upgrades
+  ansible.builtin.template:
     src: "50unattended-upgrades.j2"
     dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
     mode: "0644"
     owner: root
     group: root
   notify:
-    - restarted unattended-upgrade services
+    - Restarted unattended-upgrade services
 
 - name: Initialized bitwarden vault
-  shell:
+  ansible.builtin.shell:
     cmd: "bw sync"
     executable: "/bin/bash"
   delegate_to: localhost
@@ -63,7 +69,7 @@
   changed_when: false
 
 - name: Unlocked bitwarden vault with generated session key
-  shell:
+  ansible.builtin.shell:
     cmd: "bw unlock {{ bw_passwd }} --raw"
     executable: "/bin/bash"
   environment:
@@ -74,11 +80,11 @@
   check_mode: false
   changed_when: false
   notify:
-    - locked bitwarden vault
+    - Locked bitwarden vault
 
-- name: get ssh public key from bitwarden
-  shell:
-    cmd: "bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
+- name: Get ssh public key from bitwarden
+  ansible.builtin.shell:
+    cmd: "set -o pipefail && bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
     executable: "/bin/bash"
   delegate_to: localhost
   run_once: true
@@ -86,22 +92,25 @@
   check_mode: false
   changed_when: false
 
-- name: pushed ssh public key
-  authorized_key:
+- name: Pushed ssh public key
+  ansible.posix.authorized_key:
     user: "{{ ansible_ssh_user }}"
     state: present
     key: "{{ ssh_public_key.stdout }}"
   register: ssh_key
 
-- name: disabled ssh password authentication
-  lineinfile:
+- name: Disabled ssh password authentication
+  ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
     validate: "/usr/sbin/sshd -t -f %s"
   with_items:
     - "PasswordAuthentication no"
     - "PermitRootLogin yes"
   notify:
-    - restarted ssh
+    - Restarted ssh

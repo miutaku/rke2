@@ -1,16 +1,16 @@
 ---
-- name: installed haproxy
-  apt:
+- name: Installed haproxy
+  ansible.builtin.apt:
     name: haproxy
     state: present
     update_cache: true
 
-- name: prepared haproxy config
-  template:
+- name: Prepared haproxy config
+  ansible.builtin.template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
     mode: "0644"
     owner: root
     group: root
   notify:
-    - restarted haproxy
+    - Restarted haproxy

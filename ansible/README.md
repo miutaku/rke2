@@ -6,6 +6,7 @@ ansibleで各ノードを構成する。
 
 - python3
 - Pip3
+- Pipenv
 
 # usage
 

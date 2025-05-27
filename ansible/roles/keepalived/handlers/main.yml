@@ -1,11 +1,11 @@
 ---
-- name: restarted keepalived
-  service:
+- name: Restarted keepalived
+  ansible.builtin.service:
     name: keepalived
     state: restarted
 
-- name: locked bitwarden vault
-  shell:
+- name: Locked bitwarden vault
+  ansible.builtin.shell:
     cmd: "bw lock"
     executable: "/bin/bash"
   delegate_to: localhost

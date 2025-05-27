@@ -1,6 +1,6 @@
 ---
-- name: restarted unattended-upgrade services
-  service:
+- name: Restarted unattended-upgrade services
+  ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
   with_items:
@@ -8,14 +8,15 @@
     - apt-daily.timer
     - apt-daily-upgrade.timer
 
-- name: restarted ssh
-  service:
+- name: Restarted ssh
+  ansible.builtin.service:
     name: ssh
     state: restarted
 
-- name: locked bitwarden vault
-  shell:
+- name: Locked bitwarden vault
+  ansible.builtin.shell:
     cmd: "bw lock"
     executable: "/bin/bash"
   delegate_to: localhost
   check_mode: false
+  changed_when: false

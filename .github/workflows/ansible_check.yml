@@ -7,6 +7,11 @@ on:
       - '*'
     paths:
       - 'ansible/**'
+  pull_request:
+    branches:
+      - '*'
+    paths:
+      - 'ansible/**'
 
 env:
   PYTHON_VERSION: 3.13.2
@@ -25,6 +30,8 @@ jobs:
       - run: |
           pip3 install pipenv
           pipenv install --dev
+      - run: pipenv run ansible-galaxy install -r requirements.yml
+      - run: pipenv run ansible-galaxy collection install -r requirements.yml
       - run: pipenv run ansible-lint lb.yml
       - run: pipenv run ansible-playbook lb.yml --syntax-check
 
