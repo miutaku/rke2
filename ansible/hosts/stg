@@ -1,15 +1,15 @@
 [rke2-lb]
-192.168.20.135 keepalived_priority=100 #lb-01-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64
-192.168.20.136 keepalived_priority=90 #lb-02-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64
+192.168.20.135 keepalived_priority=100 hostname=lb-01-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64
+192.168.20.136 keepalived_priority=90  hostname=lb-02-rke2-haproxy-keepalived-ubuntu-24-04-home-amd64
 
 [rke2-server]
-192.168.20.126 #master-01-rke2-server-ubuntu-24-04-home-amd64
-192.168.20.127 #master-02-rke2-server-ubuntu-24-04-home-amd64
-192.168.20.128 #master-03-rke2-server-ubuntu-24-04-home-amd64
+192.168.20.126 hostname=master-01-rke2-server-ubuntu-24-04-home-amd64
+192.168.20.127 hostname=master-02-rke2-server-ubuntu-24-04-home-amd64
+192.168.20.128 hostname=master-03-rke2-server-ubuntu-24-04-home-amd64
 
 [rke2-agent]
-192.168.20.129 #worker-01-rke2-agent-ubuntu-24-04-home-amd64
-192.168.20.130 #worker-02-rke2-agent-ubuntu-24-04-home-amd64
+192.168.20.129 hostname=worker-01-rke2-agent-ubuntu-24-04-home-amd64
+192.168.20.130 hostname=worker-02-rke2-agent-ubuntu-24-04-home-amd64
 
 [stg-rke2:children]
 rke2-lb

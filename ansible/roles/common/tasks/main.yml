@@ -1,4 +1,8 @@
 ---
+- name: Changed hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+
 - name: Disabled install-recommends
   ansible.builtin.lineinfile:
     path: "/etc/apt/apt.conf.d/00-no-install-recommends"
