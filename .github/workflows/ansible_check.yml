@@ -3,6 +3,8 @@ name: ansible ci
 
 on:
   push:
+    branches:
+      - '*'
     paths:
       - 'ansible/**'
 
