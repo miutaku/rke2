@@ -84,7 +84,7 @@
 
 - name: Get ssh public key from bitwarden
   ansible.builtin.shell:
-    cmd: "bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
+    cmd: "set -o pipefail && bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
     executable: "/bin/bash"
   delegate_to: localhost
   run_once: true
