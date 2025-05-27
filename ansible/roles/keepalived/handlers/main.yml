@@ -9,5 +9,6 @@
     cmd: "bw lock"
     executable: "/bin/bash"
   delegate_to: localhost
+  become: false
   check_mode: false
   changed_when: false

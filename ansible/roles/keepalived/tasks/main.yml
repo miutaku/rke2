@@ -10,6 +10,7 @@
     cmd: "bw sync"
     executable: "/bin/bash"
   delegate_to: localhost
+  become: false
   check_mode: false
   changed_when: false
 
@@ -20,6 +21,7 @@
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
   delegate_to: localhost
+  become: false
   run_once: true
   register: bw_session_key
   check_mode: false
@@ -32,6 +34,7 @@
     cmd: "set -o pipefail && bw get item {{ bw_credentials.keepalived }} --session {{ bw_session_key.stdout }} | jq -r .login.password"
     executable: "/bin/bash"
   delegate_to: localhost
+  become: false
   run_once: true
   register: keepalived_auth_pass
   check_mode: false

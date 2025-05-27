@@ -69,6 +69,8 @@
     cmd: "bw sync"
     executable: "/bin/bash"
   delegate_to: localhost
+  become: false
+  run_once: true
   check_mode: false
   changed_when: false
 
@@ -79,6 +81,7 @@
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
   delegate_to: localhost
+  become: false
   run_once: true
   register: bw_session_key
   check_mode: false
@@ -92,6 +95,7 @@
     executable: "/bin/bash"
   delegate_to: localhost
   run_once: true
+  become: false
   register: ssh_public_key
   check_mode: false
   changed_when: false
