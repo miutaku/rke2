@@ -11,3 +11,6 @@ haproxy:
       ip: 192.168.0.127
     - name: "master-03-rke2-server-ubuntu-24-04-home-amd64"
       ip: 192.168.0.128
+
+bw_cred_keepalived: '24a0a201-19de-4475-94bc-b2e800eb387a'
+bw_cred_rke2_server_token: 'bc5460f9-2ed0-417b-a8ba-b2ea00ff40eb'
