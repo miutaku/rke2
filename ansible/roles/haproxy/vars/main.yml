@@ -1,3 +1,0 @@
----
-haproxy_user: "{{ lookup('bitwarden.secrets.lookup', bw_credentials.haproxy, field='username') }}"
-haproxy_password: "{{ lookup('bitwarden.secrets.lookup', bw_credentials.haproxy, field='password') }}"

@@ -1,2 +1,0 @@
----
-keepalived_auth_pass: "{{ lookup('bitwarden.secrets.lookup', bw_credentials.keepalived, field='password') }}"
