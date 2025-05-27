@@ -5,6 +5,9 @@
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
   with_items:
     - 'APT::Install-Suggests 0;'
     - 'APT::Install-Recommends 0;'
@@ -12,7 +15,7 @@
 - name: Upgraded apt packages
   ansible.builtin.apt:
     name: '*'
-    state: latest
+    state: present
     update_cache: true
     autoremove: true
 
@@ -38,6 +41,9 @@
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
   with_items:
     - 'APT::Periodic::Update-Package-Lists "1";'
     - 'APT::Periodic::Unattended-Upgrade "1";'
@@ -55,7 +61,7 @@
     - Restarted unattended-upgrade services
 
 - name: Initialized bitwarden vault
-  shell:
+  ansible.builtin.shell:
     cmd: "bw sync"
     executable: "/bin/bash"
   delegate_to: localhost
@@ -63,7 +69,7 @@
   changed_when: false
 
 - name: Unlocked bitwarden vault with generated session key
-  shell:
+  ansible.builtin.shell:
     cmd: "bw unlock {{ bw_passwd }} --raw"
     executable: "/bin/bash"
   environment:
@@ -77,7 +83,7 @@
     - Locked bitwarden vault
 
 - name: Get ssh public key from bitwarden
-  shell:
+  ansible.builtin.shell:
     cmd: "bw get item {{ bw_credentials.ssh }} --session {{ bw_session_key.stdout }} | jq -r .sshKey.publicKey"
     executable: "/bin/bash"
   delegate_to: localhost
@@ -87,18 +93,21 @@
   changed_when: false
 
 - name: Pushed ssh public key
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ ansible_ssh_user }}"
     state: present
     key: "{{ ssh_public_key.stdout }}"
   register: ssh_key
 
 - name: Disabled ssh password authentication
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     line: "{{ item }}"
     create: true
     state: present
+    mode: "0644"
+    owner: root
+    group: root
     validate: "/usr/sbin/sshd -t -f %s"
   with_items:
     - "PasswordAuthentication no"

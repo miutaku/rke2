@@ -1,12 +1,12 @@
 ---
 - name: Installed keepalived
-  apt:
+  ansible.builtin.apt:
     name: keepalived
     state: present
     update_cache: true
 
 - name: Initialized bitwarden vault
-  shell:
+  ansible.builtin.shell:
     cmd: "bw sync"
     executable: "/bin/bash"
   delegate_to: localhost
@@ -14,7 +14,7 @@
   changed_when: false
 
 - name: Unlocked bitwarden vault with generated session key
-  shell:
+  ansible.builtin.shell:
     cmd: "bw unlock {{ bw_passwd }} --raw"
     executable: "/bin/bash"
   environment:
@@ -28,7 +28,7 @@
     - Locked bitwarden vault
 
 - name: Got keepalived auth_pass from bitwarden
-  shell:
+  ansible.builtin.shell:
     cmd: "bw get item {{ bw_credentials.keepalived }} --session {{ bw_session_key.stdout }} | jq -r .login.password"
     executable: "/bin/bash"
   delegate_to: localhost
@@ -38,7 +38,7 @@
   changed_when: false
 
 - name: Prepared keepalived configuration
-  template:
+  ansible.builtin.template:
     src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
     owner: root

@@ -1,11 +1,11 @@
 ---
 - name: Restarted haproxy
-  service:
+  ansible.builtin.service:
     name: haproxy
     state: restarted
 
 - name: Locked bitwarden vault
-  shell:
+  ansible.builtin.shell:
     cmd: "bw lock"
     executable: "/bin/bash"
   delegate_to: localhost
