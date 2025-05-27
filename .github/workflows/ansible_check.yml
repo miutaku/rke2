@@ -1,5 +1,5 @@
 ---
-name: ansible test
+name: ansible ci
 
 on:
   push:
