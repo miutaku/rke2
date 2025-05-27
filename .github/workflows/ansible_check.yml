@@ -1,8 +1,10 @@
 ---
-name: ansible test
+name: ansible CI
 
 on:
   push:
+    branches:
+      - '*'
     paths:
       - 'ansible/**'
 
