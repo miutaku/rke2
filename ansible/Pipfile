@@ -4,11 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ansible = "*"
-ansible-core = "*"
-jmespath = "*"
+ansible = "11.6.0"
+ansible-core = "2.18.6"
 
 [dev-packages]
+ansible = "*"
+ansible-core = "*"
 
 [requires]
 python_version = "3.13"

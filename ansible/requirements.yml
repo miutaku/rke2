@@ -1,5 +1,4 @@
 # from ansible-galaxy
 collections:
-  - name: bitwarden.secrets
   - name: community.general
   - name: ansible.posix
