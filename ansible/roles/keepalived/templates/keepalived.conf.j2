@@ -5,7 +5,7 @@ vrrp_script chk_haproxy {
 }
 
 vrrp_instance VI_1 {
-    {% if keepalived_priority == (groups['lb'] | map('extract', hostvars, 'keepalived_priority') | max) -%}
+    {% if keepalived_priority == (groups['rke2-lb'] | map('extract', hostvars, 'keepalived_priority') | max) -%}
     state MASTER
     {%- else -%}
     state BACKUP
