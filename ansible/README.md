@@ -36,3 +36,10 @@ pipenv run ansible-playbook -i hosts/inventory playbook.yml -e bw_passwd=BW_MAST
 # deploy
 
 別のレポジトリにてデプロイをしているので手動でデプロイはしない。
+
+# tips
+
+rke2のagentノードに対し、このように指定すると、ROLESに`<none>`と表示されていたものが`agent`になってくれる
+```shell
+kubectl label nodes <NODE_NAME> kubernetes.io/role=agent --overwrite=true
+```
