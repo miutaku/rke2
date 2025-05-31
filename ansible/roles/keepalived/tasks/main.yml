@@ -41,7 +41,7 @@
   changed_when: false
 
 - name: Set other rke2-lb IPs (exclude self)
-  set_fact:
+  ansible.builtin.set_fact:
     other_rke2_lb_ips: |
       {%- set my_ip = ansible_default_ipv4.address -%}
       {%- set ips = [] -%}

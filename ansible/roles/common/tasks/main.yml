@@ -5,7 +5,7 @@
     use: systemd
 
 - name: Set timezone to Asia/Tokyo
-  ansible.builtin.timezone:
+  community.general.timezone:
     name: Asia/Tokyo
 
 - name: Disabled install-recommends
