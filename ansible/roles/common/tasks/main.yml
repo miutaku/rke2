@@ -4,6 +4,10 @@
     name: "{{ hostname }}"
     use: systemd
 
+- name: Set timezone to Asia/Tokyo
+  ansible.builtin.timezone:
+    name: Asia/Tokyo
+
 - name: Disabled install-recommends
   ansible.builtin.lineinfile:
     path: "/etc/apt/apt.conf.d/00-no-install-recommends"
