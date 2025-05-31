@@ -1,4 +1,9 @@
 ---
+- name: Loaded kernel modules
+  ansible.builtin.modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ kernel_modules }}"
 - name: sysctl setting
   sysctl:
     name: "{{ item }}"

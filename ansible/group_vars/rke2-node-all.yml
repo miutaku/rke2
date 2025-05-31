@@ -1,4 +1,7 @@
 ---
+kernel_modules:
+  - br_netfilter
+
 sysctl_settings:
   - net.ipv4.ip_nonlocal_bind
   - net.ipv4.ip_forward
