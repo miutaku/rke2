@@ -14,18 +14,20 @@ defaults
 # tcp proxy for k8s api
 frontend k8s_api_front
     bind {{ haproxy.bind }}:6443
+    option tcplog
+    mode tcp
     default_backend k8s_api_back
 
 backend k8s_api_back
+    mode tcp
     balance     roundrobin
-    option      tcp-check
     # health check for api server /healthz
     tcp-check send GET\ /healthz\ HTTP/1.1\r\nHost:\ api-server
     tcp-check expect string ok
 
     # RKE2 server nodes
     {% for server in haproxy.servers %}
-    server {{ server.name }} {{ server.ip }}:6443 check
+    server {{ server.name }} {{ server.ip }}:6443
     {% endfor %}
 
 # HAP status page

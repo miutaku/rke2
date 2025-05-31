@@ -40,6 +40,19 @@
   check_mode: false
   changed_when: false
 
+- name: Set other rke2-lb IPs (exclude self)
+  set_fact:
+    other_rke2_lb_ips: |
+      {%- set my_ip = ansible_default_ipv4.address -%}
+      {%- set ips = [] -%}
+      {%- for host in groups['rke2-lb'] -%}
+        {%- set ip = hostvars[host]['ansible_default_ipv4']['address'] -%}
+        {%- if ip != my_ip -%}
+          {%- set _ = ips.append(ip) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {{ ips | join('\n        ') }}
+
 - name: Prepared keepalived configuration
   ansible.builtin.template:
     src: keepalived.conf.j2

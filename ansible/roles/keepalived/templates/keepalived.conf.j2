@@ -1,5 +1,8 @@
+global_defs {
+}
+
 vrrp_script chk_haproxy {
-    script "pidof haproxy"
+    script "killall -0 haproxy"
     interval 2
     weight 2
 }
@@ -21,8 +24,13 @@ vrrp_instance VI_1 {
         auth_pass {{ keepalived_auth_pass.stdout }}
     }
 
+    unicast_src_ip {{ ansible_default_ipv4.address }}
+    unicast_peer {
+        {{ other_rke2_lb_ips }}
+    }
+
     virtual_ipaddress {
-        {{ lb.vip }}/32
+        {{ lb.vip }}
     }
 
     track_script {
