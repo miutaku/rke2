@@ -11,24 +11,50 @@ defaults
     timeout client      30s
     timeout server      30s
 
-# tcp proxy for k8s api
-frontend k8s_api_front
-    bind {{ haproxy.bind }}:6443
+# tcp proxy for k8s regis
+frontend k8s_regist_front
+    bind {{ haproxy.bind }}:9345
     option tcplog
     mode tcp
-    default_backend k8s_api_back
+    default_backend k8s_regist_back
 
-backend k8s_api_back
+backend k8s_regist_back
     mode tcp
     balance     roundrobin
-    # health check for api server /healthz
-    tcp-check send GET\ /healthz\ HTTP/1.1\r\nHost:\ api-server
-    tcp-check expect string ok
-
+    option tcp-check
     # RKE2 server nodes
     {% for server in haproxy.servers %}
-    server {{ server.name }} {{ server.ip }}:6443
+    server {{ server.name }} {{ server.ip }}:9345 check
     {% endfor %}
+
+# tcp proxy for k8s api
+frontend http_frontend
+    bind *:80
+    mode tcp
+    option tcplog
+    default_backend k8s_api
+
+frontend https_frontend
+    bind *:443
+    mode tcp
+    option tcplog
+    default_backend k8s_api
+
+frontend kubernetes-api
+    bind *:6443
+    mode tcp
+    option tcplog
+    default_backend k8s_api
+
+backend k8s_api
+    mode tcp
+    balance roundrobin
+    option tcp-check
+    # RKE2 server nodes
+    {% for server in haproxy.servers %}
+    server {{ server.name }} {{ server.ip }}:9345 check
+    {% endfor %}
+
 
 # HAP status page
 listen stats
