@@ -1,0 +1,10 @@
+---
+{% if not temporary_config %}
+server: https://{{ lb.vip }}:9345
+token: "{{ rke2_node_token | tqaqrim }}"
+{% endif %}
+cni: calico
+tls-san:
+  - "{{ lb.vip }}"
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute" # Never doing user workload (Only ControlePlane+etcd)

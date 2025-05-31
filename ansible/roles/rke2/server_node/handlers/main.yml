@@ -1,0 +1,6 @@
+---
+- name: Restarted rke2-server with enabled
+  ansible.builtin.service:
+    name: rke2-server
+    state: restarted
+    enabled: true

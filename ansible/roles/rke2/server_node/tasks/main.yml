@@ -1,0 +1,88 @@
+---
+- name: Check if RKE2 binary exists
+  ansible.builtin.stat:
+    path: /local/bin/rke2
+  register: rke2_binary
+
+- name: Installed RKE2 server binary
+  ansible.builtin.shell:
+    cmd: 'set -o pipefail | curl -sfL https://get.rke2.io INSTALL_RKE2_TYPE="server" | sh -'
+    creates: /usr/local/bin/rke2
+  changed_when: rke2_binary.stat.exists == false
+
+- name: Created config directory
+  file:
+    path: /etc/rancher/rke2
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create temporary config file for primary server
+  template:
+    src: rke2_config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    temporary_config: true
+  when: inventory_hostname in groups['rke2-server-primary']
+
+- name: Started first master
+  ansible.builtin.service:
+    name: rke2-server
+    state: started
+    enabled: true
+  when:
+    - inventory_hostname in groups['rke2-server-primary']
+    - not ansible_check_mode
+
+- name: Wait for first master to generate token
+  ansible.builtin.wait_for:
+    timeout: 5
+  when: inventory_hostname in groups['rke2-server-primary']
+
+- name: Read RKE2 server token
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/rke2/server/token
+  register: rke2_token
+  when:
+    - inventory_hostname in groups['rke2-server-primary']
+    - not ansible_check_mode
+
+- name: Set cluster facts on all nodes
+  set_fact:
+    rke2_node_token: "{{ rke2_token.content | b64decode }}"
+  delegate_to: rke2-server-primary
+  run_once: true
+  when:
+    - inventory_hostname in groups['rke2-server-primary']
+    - not ansible_check_mode
+
+- name: Create config dir
+  file:
+    path: /etc/rancher/rke2
+    state: directory
+    mode: '0755'
+
+- name: Create cluster config file
+  template:
+    src: rke2_config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Restarted rke2-server with enabled
+  vars:
+    temporary_config: false
+  when: not ansible_check_mode
+
+- name: Restarted primary RKE2 server when config changed
+  ansible.builtin.service:
+    name: rke2-server
+    state: restarted
+  when:
+    - inventory_hostname in groups['rke2-server-primary']
+    - not ansible_check_mode
