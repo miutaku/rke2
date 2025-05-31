@@ -13,4 +13,5 @@
       tags: sysctl
     - role: rke2/server_node
       tags: rke2_server
-
+    - role: rke2/all_node
+      tags: rke2_all_node
