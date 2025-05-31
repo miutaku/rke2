@@ -10,6 +10,16 @@
     creates: /usr/local/bin/rke2
   changed_when: rke2_binary.stat.exists == false
 
+- name: Added k8s bin directory to system-wide PATH
+  ansible.builtin.lineinfile:
+    path: /etc/profile.d/999-rke2-path.sh
+    line: 'PATH=$PATH:/var/lib/rancher/rke2/bin'
+    create: true
+    state: present
+    mode: '0755'
+    owner: root
+    group: root
+
 - name: Created config directory
   file:
     path: /etc/rancher/rke2
