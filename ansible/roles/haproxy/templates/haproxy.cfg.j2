@@ -11,7 +11,7 @@ defaults
     timeout client      30s
     timeout server      30s
 
-# tcp proxy for k8s regis
+# tcp proxy for k8s regist
 frontend k8s_regist_front
     bind {{ haproxy.bind }}:9345
     option tcplog
@@ -20,7 +20,7 @@ frontend k8s_regist_front
 
 backend k8s_regist_back
     mode tcp
-    balance     roundrobin
+    balance roundrobin
     option tcp-check
     # RKE2 server nodes
     {% for server in haproxy.servers %}
@@ -28,19 +28,19 @@ backend k8s_regist_back
     {% endfor %}
 
 # tcp proxy for k8s api
-frontend http_frontend
+frontend http_front
     bind *:80
     mode tcp
     option tcplog
     default_backend k8s_api
 
-frontend https_frontend
+frontend https_front
     bind *:443
     mode tcp
     option tcplog
     default_backend k8s_api
 
-frontend kubernetes-api
+frontend k8s_api_front
     bind *:6443
     mode tcp
     option tcplog
