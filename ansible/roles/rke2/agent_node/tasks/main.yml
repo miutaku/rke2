@@ -1,0 +1,29 @@
+---
+- name: Check if RKE2 binary exists
+  ansible.builtin.stat:
+    path: /local/bin/rke2
+  register: rke2_binary
+
+- name: Installed RKE2 server binary
+  ansible.builtin.shell:
+    cmd: 'set -o pipefail | curl -sfL https://get.rke2.io INSTALL_RKE2_TYPE="agent" | sh -'
+    creates: /usr/local/bin/rke2
+  changed_when: rke2_binary.stat.exists == false
+
+- name: Created config directory
+  file:
+    path: /etc/rancher/rke2
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create config file
+  template:
+    src: rke2_config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Restarted rke2-agent with enabled

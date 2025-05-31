@@ -1,0 +1,8 @@
+---
+- name: Restarted rke2-agent with enabled
+  ansible.builtin.service:
+    name: rke2-agent
+    state: restarted
+    enabled: true
+  when:
+    - not (rke2_binary.stat.exists == false and ansible_check_mode == true)
