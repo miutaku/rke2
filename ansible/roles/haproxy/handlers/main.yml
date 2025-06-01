@@ -3,7 +3,7 @@
   ansible.builtin.service:
     name: haproxy
     state: restarted
-  when: not (install_haproxy.changed == true and ansible_check_mode == true)
+  when: not (install_haproxy.changed and ansible_check_mode)
   retries: 5
   delay: 5
 

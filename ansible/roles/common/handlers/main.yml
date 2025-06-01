@@ -8,7 +8,7 @@
     - apt-daily.timer
     - apt-daily-upgrade.timer
   when:
-    - not (install_unattended_upgrades.changed == true and ansible_check_mode == true)
+    - not (install_unattended_upgrades.changed and ansible_check_mode)
 
 - name: Restarted ssh
   ansible.builtin.service:
