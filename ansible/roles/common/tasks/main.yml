@@ -36,13 +36,14 @@
   with_items:
     - vim
 
-- name: Installed untested-upgrades
+- name: Installed unattended-upgrades
   ansible.builtin.apt:
     name:
       - unattended-upgrades
       - apt-listchanges
     state: present
     update_cache: true
+  register: install_unattended_upgrades
 
 - name: Enabled 20auto-upgrades for unattended upgrades
   ansible.builtin.lineinfile:

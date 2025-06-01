@@ -8,7 +8,7 @@
   ansible.builtin.shell:
     cmd: 'set -o pipefail | curl -sfL https://get.rke2.io INSTALL_RKE2_TYPE="server" | sh -'
     creates: /usr/local/bin/rke2
-  changed_when: rke2_binary.stat.exists == false
+  when: rke2_binary.stat.exists == false
 
 - name: Created config directory
   file:
@@ -36,7 +36,7 @@
     enabled: true
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - not ansible_check_mode
+    - ansible_check_mode == false
 
 - name: Wait for first master to generate token
   ansible.builtin.wait_for:
@@ -49,7 +49,14 @@
   register: rke2_token
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - not ansible_check_mode
+    - ansible_check_mode == false
+
+- name: Set dummy token
+  ansible.builtin.set_fact:
+    rke2_token:
+      content: "{{ 'dummy_token' | b64encode }}"
+  when:
+    - ansible_check_mode == true
 
 - name: Set cluster facts on all nodes
   set_fact:
@@ -58,7 +65,7 @@
   run_once: true
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - not ansible_check_mode
+    - ansible_check_mode == false
 
 - name: Create config dir
   file:
@@ -77,7 +84,7 @@
     - Restarted rke2-server with enabled
   vars:
     temporary_config: false
-  when: not ansible_check_mode
+  when: ansible_check_mode == false
 
 - name: Restarted primary RKE2 server when config changed
   ansible.builtin.service:
@@ -85,4 +92,4 @@
     state: restarted
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - not ansible_check_mode
+    - ansible_check_mode == false

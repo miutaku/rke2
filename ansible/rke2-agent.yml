@@ -12,6 +12,14 @@
         src: /var/lib/rancher/rke2/server/token
       register: rke2_token_raw
       tags: rke2_agent_node
+      when: ansible_check_mode == false
+
+    - name: Set dummy token
+      ansible.builtin.set_fact:
+        rke2_token_raw:
+          content: "{{ 'dummy_token' | b64encode }}"
+      when:
+        - ansible_check_mode == true
 
     - name: Set token fact for all hosts
       set_fact:

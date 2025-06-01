@@ -4,6 +4,7 @@
     name: keepalived
     state: present
     update_cache: true
+  register: install_keepalived
 
 - name: Initialized bitwarden vault
   ansible.builtin.shell:

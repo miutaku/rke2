@@ -3,6 +3,7 @@
   ansible.builtin.service:
     name: haproxy
     state: restarted
+  when: not (install_haproxy.changed == true and ansible_check_mode == true)
 
 - name: Locked bitwarden vault
   ansible.builtin.shell:

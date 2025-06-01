@@ -1,7 +1,7 @@
 ---
 {% if not temporary_config %}
 server: https://{{ lb.vip }}:9345
-token: "{{ rke2_node_token | tqaqrim }}"
+token: "{{ rke2_node_token | trim }}"
 {% endif %}
 cni: calico
 tls-san:

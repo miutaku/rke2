@@ -8,7 +8,7 @@
   ansible.builtin.shell:
     cmd: 'set -o pipefail | curl -sfL https://get.rke2.io INSTALL_RKE2_TYPE="agent" | sh -'
     creates: /usr/local/bin/rke2
-  changed_when: rke2_binary.stat.exists == false
+  when: rke2_binary.stat.exists == false
 
 - name: Created config directory
   file:
