@@ -4,6 +4,8 @@
     name: haproxy
     state: restarted
   when: not (install_haproxy.changed == true and ansible_check_mode == true)
+  retries: 5
+  delay: 5
 
 - name: Locked bitwarden vault
   ansible.builtin.shell:

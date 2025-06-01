@@ -52,7 +52,7 @@ backend k8s_api
     option tcp-check
     # RKE2 server nodes
     {% for server in haproxy.servers %}
-    server {{ server.name }} {{ server.ip }}:9345 check
+    server {{ server.name }} {{ server.ip }}:6443 check
     {% endfor %}
 
 

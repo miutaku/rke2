@@ -4,3 +4,5 @@
     name: rke2-server
     state: restarted
     enabled: true
+  retries: 15 # wait for rke2-server to be ready
+  delay: 120

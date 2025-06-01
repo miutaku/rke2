@@ -3,12 +3,15 @@
   hosts: rke2-lb
   strategy: debug
   gather_facts: true
+  become: true
   vars:
-    ansible_user: root # Because LXC containers are used, the user is root
+    ansible_user: miutaku # tips: with --ask-become-pass, this user must have sudo privileges
   roles:
     - role: common
       tags: common
-    - role: haproxy
-      tags: haproxy
+    - role: sysctl
+      tags: sysctl
     - role: keepalived
       tags: keepalived
+    - role: haproxy
+      tags: haproxy

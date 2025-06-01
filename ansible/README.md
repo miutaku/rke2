@@ -41,5 +41,5 @@ pipenv run ansible-playbook -i hosts/inventory playbook.yml -e bw_passwd=BW_MAST
 
 rke2のagentノードに対し、このように指定すると、ROLESに`<none>`と表示されていたものが`agent`になってくれる
 ```shell
-kubectl label nodes <NODE_NAME> kubernetes.io/role=agent --overwrite=true
+kubectl label nodes $(kubectl get nodes --no-headers | awk '$3 == "<none>" { print $1 }') kubernetes.io/role=agent --overwrite=true
 ```

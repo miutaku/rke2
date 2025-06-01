@@ -10,6 +10,16 @@
     creates: /usr/local/bin/rke2
   when: rke2_binary.stat.exists == false
 
+- name: Create KUBECONFIG env setting for all users
+  ansible.builtin.lineinfile:
+    path: /etc/profile.d/rke2-kubeconfig.sh
+    line: 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml'
+    create: true
+    state: present
+    mode: '0755'
+    owner: root
+    group: root
+
 - name: Created config directory
   file:
     path: /etc/rancher/rke2
@@ -38,15 +48,12 @@
     - inventory_hostname in groups['rke2-server-primary']
     - ansible_check_mode == false
 
-- name: Wait for first master to generate token
-  ansible.builtin.wait_for:
-    timeout: 5
-  when: inventory_hostname in groups['rke2-server-primary']
-
 - name: Read RKE2 server token
   ansible.builtin.slurp:
     src: /var/lib/rancher/rke2/server/token
   register: rke2_token
+  retries: 5
+  delay: 5
   when:
     - inventory_hostname in groups['rke2-server-primary']
     - ansible_check_mode == false

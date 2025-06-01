@@ -27,6 +27,8 @@
     state: present
     update_cache: true
     autoremove: true
+  retries: 300 # wait for dpkg lock
+  delay: 5
 
 - name: Installed packages
   ansible.builtin.apt:
