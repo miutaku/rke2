@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Notify private repo
         run: |
-          curl -X POST https://api.github.com/repos/${{ github.actor }}/${{ github.PRIVATE_DEPLOY_REPO }}/dispatches \
+          curl -X POST https://api.github.com/repos/${{ github.actor }}/${{ secrets.PRIVATE_DEPLOY_REPO }}/dispatches \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: token ${{ secrets.PRIVATE_RKE2_REPO_PAT }}" \
             -d '{"event_type":"deploy_from_public_repo", "client_payload": { "branch": "${{ github.ref_name }}" }}'
