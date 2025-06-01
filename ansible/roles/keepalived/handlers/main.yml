@@ -3,7 +3,7 @@
   ansible.builtin.service:
     name: keepalived
     state: restarted
-  when: not (install_keepalived.changed == true and ansible_check_mode == true)
+  when: not (install_keepalived.changed and ansible_check_mode)
 
 - name: Locked bitwarden vault
   ansible.builtin.shell:
