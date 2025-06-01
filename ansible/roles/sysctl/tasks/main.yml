@@ -5,7 +5,7 @@
     state: present
   with_items: "{{ kernel_modules }}"
 
-- name: sysctl setting
+- name: Set sysctl settings
   ansible.posix.sysctl:
     name: "{{ item }}"
     value: "1"
