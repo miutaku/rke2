@@ -25,3 +25,10 @@
     mode: '0755'
     owner: root
     group: root
+
+- name: Installed iptables
+  ansible.builtin.apt:
+    name: iptables
+    state: present
+    update_cache: true
+    autoremove: true
