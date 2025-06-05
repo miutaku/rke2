@@ -8,3 +8,18 @@
     mode: '0755'
     owner: root
     group: root
+
+- name: Get latest Calico release URL
+  ansible.builtin.shell: >
+    curl -s https://api.github.com/repos/projectcalico/calico/releases | 
+    jq -r '.[0].assets[] | select(.name | test("calicoctl-linux-amd64")) | .browser_download_url'
+  register: calico_url
+  changed_when: false
+
+- name: Install calicoctl
+  ansible.builtin.get_url:
+    url: "{{ calico_url.stdout }}"
+    dest: /usr/local/bin/calicoctl
+    mode: '0755'
+    owner: root
+    group: root
