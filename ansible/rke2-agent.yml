@@ -48,5 +48,5 @@
       tags: common
     - role: rke2/agent_node
       tags: rke2_agent_node
-    - role: rke2/all_node
+    - role: rke2_all_node
       tags: rke2_all_node
