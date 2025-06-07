@@ -17,6 +17,23 @@ env:
   PYTHON_VERSION: 3.13.2
 
 jobs:
+  site-ansible-test:
+    defaults:
+      run:
+        working-directory: ansible
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: |
+          pip3 install pipenv
+          pipenv install --dev
+      - run: pipenv run ansible-galaxy install -r requirements.yml
+      - run: pipenv run ansible-galaxy collection install -r requirements.yml
+      - run: pipenv run ansible-lint site.yml
+      - run: pipenv run ansible-playbook site.yml --syntax-check
   lb-ansible-test:
     defaults:
       run:
@@ -32,8 +49,8 @@ jobs:
           pipenv install --dev
       - run: pipenv run ansible-galaxy install -r requirements.yml
       - run: pipenv run ansible-galaxy collection install -r requirements.yml
-      - run: pipenv run ansible-lint lb.yml
-      - run: pipenv run ansible-playbook lb.yml --syntax-check
+      - run: pipenv run ansible-lint rke2-lb.yml
+      - run: pipenv run ansible-playbook rke2-lb.yml --syntax-check
 
   server-ansible-check:
     defaults:
@@ -48,8 +65,8 @@ jobs:
       - run: |
           pip3 install pipenv
           pipenv install --dev
-      - run: pipenv run ansible-lint server.yml
-      - run: pipenv run ansible-playbook server.yml --syntax-check
+      - run: pipenv run ansible-lint rke2-server.yml
+      - run: pipenv run ansible-playbook rke2-server.yml --syntax-check
 
   agent-ansible-check:
     defaults:
@@ -64,5 +81,5 @@ jobs:
       - run: |
           pip3 install pipenv
           pipenv install --dev
-      - run: pipenv run ansible-lint agent.yml
-      - run: pipenv run ansible-playbook agent.yml --syntax-check
+      - run: pipenv run ansible-lint rke2-agent.yml
+      - run: pipenv run ansible-playbook rke2-agent.yml --syntax-check
