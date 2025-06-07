@@ -17,7 +17,7 @@ env:
   PYTHON_VERSION: 3.13.2
 
 jobs:
-  site-ansible-test:
+  site-ansible-check:
     defaults:
       run:
         working-directory: ansible
@@ -34,7 +34,7 @@ jobs:
       - run: pipenv run ansible-galaxy collection install -r requirements.yml
       - run: pipenv run ansible-lint site.yml
       - run: pipenv run ansible-playbook site.yml --syntax-check
-  lb-ansible-test:
+  lb-ansible-check:
     defaults:
       run:
         working-directory: ansible
@@ -65,6 +65,8 @@ jobs:
       - run: |
           pip3 install pipenv
           pipenv install --dev
+      - run: pipenv run ansible-galaxy install -r requirements.yml
+      - run: pipenv run ansible-galaxy collection install -r requirements.yml
       - run: pipenv run ansible-lint rke2-server.yml
       - run: pipenv run ansible-playbook rke2-server.yml --syntax-check
 
@@ -81,5 +83,7 @@ jobs:
       - run: |
           pip3 install pipenv
           pipenv install --dev
+      - run: pipenv run ansible-galaxy install -r requirements.yml
+      - run: pipenv run ansible-galaxy collection install -r requirements.yml
       - run: pipenv run ansible-lint rke2-agent.yml
       - run: pipenv run ansible-playbook rke2-agent.yml --syntax-check
