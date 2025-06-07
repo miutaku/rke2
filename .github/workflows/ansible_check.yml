@@ -35,35 +35,34 @@ jobs:
       - run: pipenv run ansible-lint lb.yml
       - run: pipenv run ansible-playbook lb.yml --syntax-check
 
-#  server-ansible-check:
-#    defaults:
-#      run:
-#        working-directory: ansible
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ env.PYTHON_VERSION }}
-#      - run: |
-#          pip3 install pipenv
-#          pipenv install --dev
-#      - run: pipenv run ansible-lint server.yml
-#      - run: pipenv run ansible-playbook server.yml --syntax-check
-#
-#  agent-ansible-check:
-#    defaults:
-#      run:
-#        working-directory: ansible
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ env.PYTHON_VERSION }}
-#      - run: |
-#          pip3 install pipenv
-#          pipenv install --dev
-#      - run: pipenv run ansible-lint agent.yml
-#      - run: pipenv run ansible-playbook agent.yml --syntax-check
-#
+  server-ansible-check:
+    defaults:
+      run:
+        working-directory: ansible
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: |
+          pip3 install pipenv
+          pipenv install --dev
+      - run: pipenv run ansible-lint server.yml
+      - run: pipenv run ansible-playbook server.yml --syntax-check
+
+  agent-ansible-check:
+    defaults:
+      run:
+        working-directory: ansible
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: |
+          pip3 install pipenv
+          pipenv install --dev
+      - run: pipenv run ansible-lint agent.yml
+      - run: pipenv run ansible-playbook agent.yml --syntax-check
