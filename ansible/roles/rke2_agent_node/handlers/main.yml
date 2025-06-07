@@ -7,5 +7,5 @@
   retries: 15 # wait for rke2-server to be ready
   delay: 120
   when:
-    - rke2_binary.stat.exists is not defined or rke2_binary.stat.exists | bool == false
+    - rke2_binary.stat.exists is not defined or not rke2_binary.stat.exists | bool
     - not ansible_check_mode
