@@ -11,7 +11,7 @@
 
 - name: Get latest Calico release URL
   ansible.builtin.shell: >
-    curl -s https://api.github.com/repos/projectcalico/calico/releases | 
+    set -o pipefail; curl -s https://api.github.com/repos/projectcalico/calico/releases |
     jq -r '.[0].assets[] | select(.name | test("calicoctl-linux-amd64")) | .browser_download_url'
   delegate_to: localhost
   run_once: true

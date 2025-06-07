@@ -6,9 +6,9 @@
 
 - name: Installed RKE2 server binary
   ansible.builtin.shell:
-    cmd: 'set -o pipefail | curl -sfL https://get.rke2.io INSTALL_RKE2_TYPE="server" | sh -'
+    cmd: 'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="server" sh -'
     creates: /usr/local/bin/rke2
-  when: rke2_binary.stat.exists == false
+  when: not rke2_binary.stat.exists
 
 - name: Create KUBECONFIG env setting for all users
   ansible.builtin.lineinfile:
@@ -21,7 +21,7 @@
     group: root
 
 - name: Created config directory
-  file:
+  ansible.builtin.file:
     path: /etc/rancher/rke2
     state: directory
     mode: '0755'
@@ -29,7 +29,7 @@
     group: root
 
 - name: Create temporary config file for primary server
-  template:
+  ansible.builtin.template:
     src: rke2_config.yaml.j2
     dest: /etc/rancher/rke2/config.yaml
     owner: root
@@ -46,7 +46,7 @@
     enabled: true
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - ansible_check_mode == false
+    - not ansible_check_mode
 
 - name: Read RKE2 server token
   ansible.builtin.slurp:
@@ -56,32 +56,31 @@
   delay: 5
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - ansible_check_mode == false
+    - not ansible_check_mode
 
 - name: Set dummy token
   ansible.builtin.set_fact:
     rke2_token:
       content: "{{ 'dummy_token' | b64encode }}"
-  when:
-    - ansible_check_mode == true
+  when: ansible_check_mode
 
 - name: Set cluster facts on all nodes
-  set_fact:
+  ansible.builtin.set_fact:
     rke2_node_token: "{{ rke2_token.content | b64decode }}"
   delegate_to: rke2-server-primary
   run_once: true
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - ansible_check_mode == false
+    - not ansible_check_mode
 
 - name: Create config dir
-  file:
+  ansible.builtin.file:
     path: /etc/rancher/rke2
     state: directory
     mode: '0755'
 
 - name: Create cluster config file
-  template:
+  ansible.builtin.template:
     src: rke2_config.yaml.j2
     dest: /etc/rancher/rke2/config.yaml
     owner: root
@@ -91,7 +90,7 @@
     - Restarted rke2-server with enabled
   vars:
     temporary_config: false
-  when: ansible_check_mode == false
+  when: not ansible_check_mode
 
 - name: Restarted primary RKE2 server when config changed
   ansible.builtin.service:
@@ -99,4 +98,4 @@
     state: restarted
   when:
     - inventory_hostname in groups['rke2-server-primary']
-    - ansible_check_mode == false
+    - not ansible_check_mode

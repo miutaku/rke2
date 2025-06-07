@@ -1,35 +1,34 @@
 ---
-- name: Configure common settings for RKE2 Server Nodes
+- name: Get RKE2 server token for agent nodes
   hosts: rke2-server-primary
   strategy: debug
   gather_facts: true
   become: true
   vars:
-    ansible_user: miutaku # tips: with --ask-become-pass, this user must have sudo privileges
+    ansible_user: miutaku
   tasks:
     - name: Read RKE2 server token
       ansible.builtin.slurp:
         src: /var/lib/rancher/rke2/server/token
       register: rke2_token_raw
       tags: rke2_agent_node
-      when: ansible_check_mode == false
+      when: not ansible_check_mode
 
     - name: Set dummy token
       ansible.builtin.set_fact:
         rke2_token_raw:
           content: "{{ 'dummy_token' | b64encode }}"
-      when:
-        - ansible_check_mode == true
+      when: ansible_check_mode
 
     - name: Set token fact for all hosts
-      set_fact:
+      ansible.builtin.set_fact:
         rke2_node_token: "{{ rke2_token_raw.content | b64decode }}"
       delegate_to: localhost
       run_once: true
       tags: rke2_agent_node
 
     - name: Add token fact to all agent hosts
-      add_host:
+      ansible.builtin.add_host:
         name: "{{ item }}"
         groups: rke2-agent
         rke2_node_token: "{{ rke2_token_raw.content | b64decode }}"
@@ -48,7 +47,7 @@
   roles:
     - role: common
       tags: common
-    - role: rke2/agent_node
+    - role: rke2_agent_node
       tags: rke2_agent_node
-    - role: rke2/all_node
+    - role: rke2_all_node
       tags: rke2_all_node
