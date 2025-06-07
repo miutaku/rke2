@@ -9,7 +9,7 @@
   roles:
     - role: common
       tags: common
-    - role: rke2_server_node
+    - role: rke2/server_node
       tags: rke2_server
-    - role: rke2_all_node
+    - role: rke2/all_node
       tags: rke2_all_node
