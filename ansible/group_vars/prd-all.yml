@@ -1,6 +1,6 @@
 ---
 lb:
-  vip: 192.168.0.227 # Router VIP
+  vip: 192.168.0.227
 
 haproxy:
   bind: "{{ lb.vip }}"
