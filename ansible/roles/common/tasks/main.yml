@@ -37,6 +37,8 @@
     update_cache: true
   with_items:
     - vim
+  retries: 100
+  delay: 5
 
 - name: Installed unattended-upgrades
   ansible.builtin.apt:
@@ -46,6 +48,8 @@
     state: present
     update_cache: true
   register: install_unattended_upgrades
+  retries: 100
+  delay: 5
 
 - name: Enabled 20auto-upgrades for unattended upgrades
   ansible.builtin.lineinfile:

@@ -5,6 +5,8 @@
     state: present
     update_cache: true
   register: install_keepalived
+  retries: 100
+  delay: 5
 
 - name: Initialized bitwarden vault
   ansible.builtin.shell:

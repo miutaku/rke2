@@ -32,3 +32,5 @@
     state: present
     update_cache: true
     autoremove: true
+  retries: 100
+  delay: 5

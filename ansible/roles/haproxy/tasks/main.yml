@@ -5,6 +5,8 @@
     state: present
     update_cache: true
   register: install_haproxy
+  retries: 100
+  delay: 5
 
 - name: Prepared haproxy config
   ansible.builtin.template:
