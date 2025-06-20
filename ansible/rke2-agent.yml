@@ -51,7 +51,7 @@
     - role: rke2_all_node
       tags: rke2_all_node
 
-- name: finalized
+- name: Finalized
   hosts: localhost
   gather_facts: false
   become: true
