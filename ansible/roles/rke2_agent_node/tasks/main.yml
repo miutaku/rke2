@@ -16,6 +16,8 @@
     cmd: 'set -o pipefail && INSTALL_RKE2_TYPE="agent" /tmp/install-rke2.sh'
     creates: /usr/local/bin/rke2
   when: not rke2_binary.stat.exists
+  vars:
+    ansible_shell_executable: /bin/bash
 
 - name: Created config directory
   ansible.builtin.file:

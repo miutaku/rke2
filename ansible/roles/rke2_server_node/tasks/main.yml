@@ -16,6 +16,8 @@
     cmd: 'set -o pipefail && INSTALL_RKE2_TYPE="server" /tmp/install-rke2.sh'
     creates: /usr/local/bin/rke2
   when: not rke2_binary.stat.exists
+  vars:
+    ansible_shell_executable: /bin/bash
 
 - name: Create KUBECONFIG env setting for all users
   ansible.builtin.lineinfile:
