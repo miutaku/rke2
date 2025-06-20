@@ -4,9 +4,16 @@
     path: /local/bin/rke2
   register: rke2_binary
 
-- name: Installed RKE2 server binary
+- name: Download RKE2 install script
+  ansible.builtin.get_url:
+    url: https://get.rke2.io
+    dest: /tmp/install-rke2.sh
+    mode: '0755'
+  when: not rke2_binary.stat.exists
+
+- name: Run RKE2 install script as agent
   ansible.builtin.shell:
-    cmd: 'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -'
+    cmd: 'set -o pipefail && INSTALL_RKE2_TYPE="agent" /tmp/install-rke2.sh'
     creates: /usr/local/bin/rke2
   when: not rke2_binary.stat.exists
 
