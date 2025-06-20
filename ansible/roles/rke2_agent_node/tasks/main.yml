@@ -6,8 +6,11 @@
 
 - name: Installed RKE2 server binary
   ansible.builtin.shell:
-    cmd: 'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -'
+    cmd: |
+      'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -'
     creates: /usr/local/bin/rke2
+  args:
+    executable: /bin/bash
   when: not rke2_binary.stat.exists
 
 - name: Created config directory
