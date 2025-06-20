@@ -1,0 +1,36 @@
+---
+- name: Installed unattended-upgrades
+  ansible.builtin.apt:
+    name:
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
+    update_cache: true
+  register: install_unattended_upgrades
+  retries: 100
+  delay: 5
+
+- name: Enabled 20auto-upgrades for unattended upgrades
+  ansible.builtin.lineinfile:
+    path: "/etc/apt/apt.conf.d/20auto-upgrades"
+    line: "{{ item }}"
+    create: true
+    state: present
+    mode: "0644"
+    owner: root
+    group: root
+  with_items:
+    - 'APT::Periodic::Update-Package-Lists "1";'
+    - 'APT::Periodic::Unattended-Upgrade "1";'
+  notify:
+    - Restarted unattended-upgrade services
+
+- name: Enabled 50unattended-upgrades for unattended upgrades
+  ansible.builtin.template:
+    src: "50unattended-upgrades.j2"
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    mode: "0644"
+    owner: root
+    group: root
+  notify:
+    - Restarted unattended-upgrade services

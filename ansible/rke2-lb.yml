@@ -15,3 +15,5 @@
       tags: keepalived
     - role: haproxy
       tags: haproxy
+    - role: auto_update
+      tags: auto_update

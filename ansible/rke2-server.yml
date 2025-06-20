@@ -13,3 +13,5 @@
       tags: rke2_server
     - role: rke2_all_node
       tags: rke2_all_node
+    - role: auto_update
+      tags: auto_update

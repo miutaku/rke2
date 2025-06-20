@@ -1,15 +1,4 @@
 ---
-- name: Restarted unattended-upgrade services
-  ansible.builtin.service:
-    name: "{{ item }}"
-    state: restarted
-  with_items:
-    - unattended-upgrades
-    - apt-daily.timer
-    - apt-daily-upgrade.timer
-  when:
-    - not (install_unattended_upgrades.changed and ansible_check_mode)
-
 - name: Restarted ssh
   ansible.builtin.service:
     name: ssh
