@@ -6,11 +6,8 @@
 
 - name: Installed RKE2 server binary
   ansible.builtin.shell:
-    cmd: |
-      'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="server" sh -'
+    cmd: 'set -o pipefail; curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="server" sh -'
     creates: /usr/local/bin/rke2
-  args:
-    executable: /bin/bash
   when: not rke2_binary.stat.exists
 
 - name: Create KUBECONFIG env setting for all users
