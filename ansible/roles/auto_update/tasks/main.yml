@@ -2,8 +2,8 @@
 - name: Installed unattended-upgrades
   ansible.builtin.apt:
     name:
-      - unattended-upgrades
-      - apt-listchanges
+      - "unattended-upgrades"
+      - "apt-listchanges"
     state: present
     update_cache: true
   register: install_unattended_upgrades
