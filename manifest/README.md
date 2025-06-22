@@ -7,14 +7,27 @@ $ kubectl get ippool default-ipv4-ippool -o yaml --kubeconfig=/tmp/kubeconfig | 
   blockSize: 24
 ```
 
-# helmでmetallbを入れる
+# helmでmetallbを入れる(Loadbalancer)
 
+## ルータへBGPの設定追加
+
+1. ルータにBGPの設定を追加する。(これはNEC IXの場合)
+```
+router bgp 64512
+  neighbor 192.168.0.126 remote-as 64520
+  neighbor 192.168.0.127 remote-as 64520
+  neighbor 192.168.0.128 remote-as 64520
+  neighbor 192.168.0.129 remote-as 64520
+  neighbor 192.168.0.130 remote-as 64520
+```
+
+2. helmでmetallbのインストール
 ```shell
-$ kubectl create ns metallb-system --kubeconfig=/tmp/kubeconfig
+$ kubectl create ns metallb-system
 namespace/metallb-system created
 
-$ helm repo add metallb https://metallb.github.io/metallb --kubeconfig=/tmp/kubeconfig
-$ helm install metallb metallb/metallb --namespace metallb-system --kubeconfig=/tmp/kubeconfig
+$ helm repo add metallb https://metallb.github.io/metallb
+$ helm install metallb metallb/metallb -n metallb-system
 NAME: metallb
 LAST DEPLOYED: Sun Jun  8 17:50:04 2025
 NAMESPACE: metallb-system
@@ -52,7 +65,7 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 ```
 
 こういうときは、
-1. `L2Advertisement`(コメントアウトされている箇所)を有効化して、`BGPPeer`と`BGPAdvertisement`の設定をコメントアウト。
+1. `L2Advertisement`(`metallb.yaml`のコメントアウトされている箇所)を有効化して、`BGPPeer`と`BGPAdvertisement`の設定をコメントアウト。
 2. 再度`BGPPeer`と`BGPAdvertisement`の設定を有効化して、`L2Advertisement`をコメントアウトして戻す。
 3. 以下コマンド実行
 ```
