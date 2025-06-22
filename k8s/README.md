@@ -64,4 +64,5 @@ $ kubectl rollout restart daemonset metallb-speaker -n metallb-system
 
 daemonset.apps/metallb-speaker restarted
 ```
-これで直るかもしれない。IX2215ではこれでなんとかなった。
+これで直るかもしれない。
+それでもダメそうとか不安定だったら`L2Advertisement`でいくか、適当なルータに買い替えよう。
