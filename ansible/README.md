@@ -16,12 +16,6 @@ ansibleで各ノードを構成する。
 - `pipenv install`
 - `pipenv run ansible-galaxy install -r requirements.yml`
 
-## 環境変数を設定する。
-
-```shell
-export BWS_ACCESS_TOKEN=<ACCESS_TOKEN_VALUE>
-```
-
 ## セットアップする。
 
 ```shell

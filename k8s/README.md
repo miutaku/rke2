@@ -1,12 +1,3 @@
-# 扱えるIPレンジを広げる
-
-```shell
-$ kubectl apply -f ipaddresspool.yaml --kubeconfig=/tmp/kubeconfig
-$ kubectl patch ippool default-ipv4-ippool --type merge -p '{"spec":{"blockSize":24}}' --kubeconfig=/tmp/kubeconfig
-$ kubectl get ippool default-ipv4-ippool -o yaml --kubeconfig=/tmp/kubeconfig | grep blockSize
-  blockSize: 24
-```
-
 # helmでmetallbを入れる(Loadbalancer)
 
 ## ルータへBGPの設定追加
