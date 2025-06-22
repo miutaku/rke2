@@ -52,7 +52,7 @@
       tags: rke2_all_node
 
 - name: Finalized
-  hosts: localhost
+  hosts: rke2-agent
   gather_facts: false
   become: true
   vars:
