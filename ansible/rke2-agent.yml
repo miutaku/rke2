@@ -46,6 +46,8 @@
   roles:
     - role: common
       tags: common
+    - role: sysctl
+      tags: sysctl
     - role: rke2_agent_node
       tags: rke2_agent_node
     - role: rke2_all_node

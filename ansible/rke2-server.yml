@@ -9,6 +9,8 @@
   roles:
     - role: common
       tags: common
+    - role: sysctl
+      tags: sysctl
     - role: rke2_server_node
       tags: rke2_server
     - role: rke2_all_node
