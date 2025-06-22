@@ -1,0 +1,39 @@
+---
+#apiVersion: metallb.io/v1beta1
+#kind: L2Advertisement
+#metadata:
+#  name: l2advertisement
+#  namespace: metallb-system
+#spec:
+#  ipAddressPools:
+#    - home-k8s-address-pool
+#---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: home-k8s-bgp-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - home-k8s-address-pool
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: home-k8s-bgp-peer
+  namespace: metallb-system
+spec:
+  myASN: 64520        # MetalLB 側 ASN
+  peerASN: 64512      # ルータ側 ASN
+  peerAddress: 192.168.0.254
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: home-k8s-address-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.0.200-192.168.0.226
+#  avoidBuggyIPs: true
+  autoAssign: true
